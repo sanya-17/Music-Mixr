@@ -1,0 +1,27 @@
+{
+  "name": "SpotifyMerge",
+  "version": "1.0.0",
+  "description": "Finds the common songs in two spotify playlists and merges them into one playlist",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanya-17/SpotifyMerge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanya-17/SpotifyMerge/issues"
+  },
+  "homepage": "https://github.com/sanya-17/SpotifyMerge#readme",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
+    "query-string": "^6.13.7"
+  }
+}
