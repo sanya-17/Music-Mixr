@@ -20,7 +20,13 @@
         <h1> My Playlists </h1>
         <p class="text-muted">Select 2 Playlists to Merge </p>
         <p>
-
+        <ul>
+            <% for (let playlist of playlists) {%>
+                <li>
+                    <%= playlist.name%>
+                </li>
+                <% } %>
+        </ul>
         </p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"

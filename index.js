@@ -3,6 +3,7 @@ const app = express();
 const path = require('path')
 const axios = require('axios');
 const queryString = require('query-string');
+const { emitWarning } = require('process');
 
 //To parse form data in POST request body:
 app.use(express.urlencoded({ extended: true }))
@@ -53,8 +54,6 @@ app.get('/callback', async (req, res) => {
         console.log(result.data);
         ACCESS_TOKEN = result.data.access_token;
         REFRESH_TOKEN = result.data.refresh_token;
-        console.log(ACCESS_TOKEN);
-        console.log(REFRESH_TOKEN);
         res.redirect('/home')
     }
     catch (e) {
@@ -62,9 +61,21 @@ app.get('/callback', async (req, res) => {
     }
 })
 
-app.get('/home', (req, res) => {
+app.get('/home', async (req, res) => {
     try {
-        res.render('home')
+        let playlists = await axios({
+            url: 'https://api.spotify.com/v1/me/playlists',
+            method: 'get',
+            headers: {
+                'Authorization': 'Bearer ' + ACCESS_TOKEN
+            }
+        })
+
+        playlists = playlists.data.items;
+
+
+        console.log(playlists);
+        res.render('home', { playlists })
     }
     catch (e) {
         console.log(e);
