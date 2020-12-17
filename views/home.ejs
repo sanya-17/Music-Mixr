@@ -25,13 +25,17 @@
         <form method="POST" action="/new_playlist">
             <% for (let playlist of playlists) {%>
                 <p>
-                    <label for <%=playlist.id%>>
+                    <label for=<%=playlist.id%>>
                         <%= playlist.name%>
                     </label>
                     <input type="checkbox" name=<%=playlist.name%> id = <%=playlist.name%> value = <%=playlist.id%>>
-                            <% } %>
                 </p>
-                <button class="btn btn-success"> Submit </button>
+                <% } %>
+                    <label for="playlist_name">Enter a name for the new playlist: </label>
+                    <input type="text" name="playlist_name" id="playlist_name" placeholder="Enter Name">
+                    <p>
+                        <button class="btn btn-success mt-4"> Submit </button>
+                    </p>
         </form>
         </p>
     </div>
