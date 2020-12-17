@@ -9,24 +9,30 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Home</title>
+    <link rel="icon" href="https://emojipedia.org/apple/">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
 
 <body class="bg-dark text-white">
-    <div class="container mt-5">
+    <div class="container mt-5 ">
         <h1> My Playlists </h1>
         <p class="text-muted">Select 2 Playlists to Merge </p>
         <p>
-        <ul>
+        <form method="POST" action="/new_playlist">
             <% for (let playlist of playlists) {%>
-                <li>
-                    <%= playlist.name%>
-                </li>
-                <% } %>
-        </ul>
+                <p>
+                    <label for <%=playlist.id%>>
+                        <%= playlist.name%>
+                    </label>
+                    <input type="checkbox" name=<%=playlist.name%> id = <%=playlist.name%> value = <%=playlist.id%>>
+                            <% } %>
+                </p>
+                <button class="btn btn-success"> Submit </button>
+        </form>
         </p>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
