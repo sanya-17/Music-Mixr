@@ -3,7 +3,8 @@ const app = express();
 const path = require('path')
 const axios = require('axios');
 const queryString = require('query-string');
-const { emitWarning } = require('process');
+const set_operations = require('./set_operations');
+const fetch_playlists = require('./fetch_playlists');
 
 //To parse form data in POST request body:
 app.use(express.urlencoded({ extended: true }))
@@ -230,130 +231,34 @@ app.get('/home', async (req, res) => {
 app.post('/new_playlist', async (req, res) => {
     const [p1, p2] = Object.values(req.body)
     const NAME = req.body.playlist_name || 'Merged Playlist';
+    const OPERATION = req.body.operation_select;
 
-    //call API to fetch playlist 1
-    try {
-        var playlist_1 = await axios.get(`https://api.spotify.com/v1/playlists/${p1}`, {
-            headers: {
-                'Authorization': 'Bearer ' + ACCESS_TOKEN
-            },
-            params: {
-                'fields': 'name,tracks.items(track)'
-            }
-        });
+    let [playlist_1, playlist_2] = await fetch_playlists(p1, p2, ACCESS_TOKEN);
+    let NEW_PLAYLIST = {}
+
+    switch (OPERATION) {
+        case "intersection":
+            NEW_PLAYLIST = await set_operations.intersection(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            break;
+
+        case "union":
+            NEW_PLAYLIST = await set_operations.union(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            break;
+
+        case "nand":
+            NEW_PLAYLIST = await set_operations.nand(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            break;
+
+        case "difference":
+            NEW_PLAYLIST = await set_operations.difference(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            break
+
+
+        default:
     }
-    catch (e) {
-        console.log(e);
-        res.redirect('/');
-    }
-
-    //call API to fetch playlist 2
-    try {
-        var playlist_2 = await axios.get(`https://api.spotify.com/v1/playlists/${p2}`, {
-            headers: {
-                'Authorization': 'Bearer ' + ACCESS_TOKEN
-            },
-            params: {
-                'fields': 'name, tracks.items.track(uri,name)'
-            }
-        });
-    }
-    catch (e) {
-        console.log(e);
-        res.redirect('/');
-    }
-
-
-    playlist_1 = playlist_1.data;
-    playlist_2 = playlist_2.data
-    console.log(playlist_1);
-    console.log(playlist_2);
-    const URIs = [];
-
-
-    //TODO: Cache the playlist with the larger size to improve performace
-    //add playlist_1 uris to set
-    let songs = new Set();
-    for (let item of playlist_1.tracks.items) {
-        songs.add(item.track.uri);
-    }
-
-    //loop over playlist 2 and if the track is in playlist 1, add it to the array of URIs
-    for (let item of playlist_2.tracks.items) {
-        if (songs.has(item.track.uri))
-            URIs.push(item.track.uri);
-    }
-
-    console.log(URIs);
-
-
-    //create new playlist
-    //fetch the current users id first, then create the playlist
-    //axios was tweaking: https://stackoverflow.com/questions/59575400/getting-request-failed-with-status-code-401-error-when-trying-to-create-a-play
-    try {
-        //fetch id
-        let user = await axios.get('https://api.spotify.com/v1/me', {
-            headers: {
-                'Authorization': 'Bearer ' + ACCESS_TOKEN
-            }
-        });
-        console.log(user.data);
-        const { id } = user.data;
-        const data = {
-            name: NAME
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        var NEW_PLAYLIST = await axios.post(`https://api.spotify.com/v1/users/${id}/playlists`, data, config)
-    }
-    catch (e) {
-        console.log(e);
-        res.redirect('/')
-    }
-
-    console.log("new playlist")
-    console.log(NEW_PLAYLIST.data);
-    const NEW_PLAYLIST_ID = NEW_PLAYLIST.data.id;
-
-    const URL = NEW_PLAYLIST.data.external_urls.spotify;
-    console.log(NEW_PLAYLIST_ID);
-    console.log(URL);
-
-    //TODO: Destructure Object to get external URL and other necessary fields
-
-
-    //add tracks to new playlist
-
-    try {
-        const data = {
-            uris: URIs
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        const result = axios.post(`https://api.spotify.com/v1/playlists/${NEW_PLAYLIST_ID}/tracks`, data, config)
-        res.redirect('/home')
-
-    }
-    catch (e) {
-        console.log(e);
-        res.redirect('/');
-    }
-
     //TODO: Redirect to a results page
 
-    //res.redirect('/home');
+    res.redirect('/home');
 })
 
 app.listen(3000, () => {

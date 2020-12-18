@@ -31,11 +31,25 @@
                     <input type="checkbox" name=<%=playlist.name%> id = <%=playlist.name%> value = <%=playlist.id%>>
                 </p>
                 <% } %>
-                    <label for="playlist_name">Enter a name for the new playlist: </label>
-                    <input type="text" name="playlist_name" id="playlist_name" placeholder="Enter Name">
+                    <p>
+                        <label for="playlist_name">Enter a name for the new playlist: </label>
+                        <input type="text" name="playlist_name" id="playlist_name" placeholder="Enter Name">
+                    </p>
+                    <p>
+                        <label for="operation_select">Choose an Operation:</label>
+
+                        <select name="operation_select" id="operation_select">
+                            <option value="intersection">Intersection</option>
+                            <option value="union">Union</option>
+                            <option value="nand">Nand</option>
+                            <option value="difference">Difference</option>
+                        </select>
+                    </p>
                     <p>
                         <button class="btn btn-success mt-4"> Submit </button>
                     </p>
+
+
         </form>
         </p>
     </div>
