@@ -1,3 +1,3 @@
 # Spotify Merge
 
-Finds the common songs in two spotify playlists and merges them into one playlist
+Performs set operations like intersecion, union, difference, and nand on two spotify playlists and creates a new resultant playlist. I should probably come up with a new name now lol
