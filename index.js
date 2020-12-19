@@ -6,6 +6,7 @@ const queryString = require('query-string');
 const setOperations = require('./setOperations');
 const getTracks = require('./getTracks');
 const config = require('./config')
+const newPlaylist = require('./newPlaylist')
 
 //To parse form data in POST request body:
 app.use(express.urlencoded({ extended: true }))
@@ -55,7 +56,7 @@ app.get('/callback', async (req, res) => {
         res.redirect('/home')
     }
     catch (e) {
-        console.log(e)
+        console.log(e.response)
     }
 })
 
@@ -74,15 +75,15 @@ app.get('/home', async (req, res) => {
         res.render('home', { playlists })
     }
     catch (e) {
-        console.log(e);
+        console.log(e.response);
         res.redirect('/');
     }
 })
 
 //TODO: Request refresh token if necessary
 //TODO: Handle null tracks and playlists
-//TODO: Handle playlists with over 100 songs
-//TODO: Error Handling
+//TODO: Handle adding more than 100 songs to the playlist
+//TODO: Error Handling, error template
 //TODO: Result Template
 app.post('/new_playlist', async (req, res) => {
     const [p1, p2] = Object.values(req.body)
@@ -95,49 +96,46 @@ app.post('/new_playlist', async (req, res) => {
         var playlist_2 = await getTracks(p2, ACCESS_TOKEN);
     }
     catch (e) {
-        console.log(e);
+        console.log(e.response);
         return res.redirect('/')
     }
 
-    /*
-    try {
-        let [playlist_1, playlist_2] = await fetch_playlists(p1, p2, ACCESS_TOKEN);
-    }
-    catch {
-        console.log(e);
-        res.redirect('/')
-    }
-    */
+    let NEW_PLAYLIST_URIs = [];
     let NEW_PLAYLIST = {}
 
+    try {
+        //do try catch
+        switch (OPERATION) {
+            case "intersection":
+                NEW_PLAYLIST_URIs = await setOperations.intersection(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+                NEW_PLAYLIST = await newPlaylist(NEW_PLAYLIST_URIs, ACCESS_TOKEN, NAME);
+                res.redirect('/home');
+                break;
 
-    //do try catch
-    switch (OPERATION) {
-        case "intersection":
-            NEW_PLAYLIST = await setOperations.intersection(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
-            res.redirect('/home');
-            break;
+            case "union":
+                NEW_PLAYLIST_URIs = await setOperations.union(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+                NEW_PLAYLIST = await newPlaylist(NEW_PLAYLIST_URIs, ACCESS_TOKEN, NAME);
+                res.redirect('/home');
+                break;
 
-        case "union":
-            NEW_PLAYLIST = await setOperations.union(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
-            res.redirect('/home');
-            break;
+            case "nand":
+                NEW_PLAYLIST_URIs = await setOperations.nand(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+                NEW_PLAYLIST = await newPlaylist(NEW_PLAYLIST_URIs, ACCESS_TOKEN, NAME);
+                res.redirect('/home');
+                break;
 
-        case "nand":
-            NEW_PLAYLIST = await setOperations.nand(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
-            res.redirect('/home');
-            break;
-
-        case "difference":
-            NEW_PLAYLIST = await setOperations.difference(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
-            res.redirect('/home');
-            break
-
-
-        default:
+            case "difference":
+                NEW_PLAYLIST_URIs = await setOperations.difference(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+                NEW_PLAYLIST = await newPlaylist(NEW_PLAYLIST_URIs, ACCESS_TOKEN, NAME);
+                res.redirect('/home');
+                break;
+            default:
+        }
     }
-    //TODO: Redirect to a results page
-
+    catch (e) {
+        console.log(e.response);
+        return res.redirect('/')
+    }
     //res.redirect('/home');
 })
 

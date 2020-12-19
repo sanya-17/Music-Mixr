@@ -21,73 +21,7 @@ const intersection = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME)
             URIs.push(item);
     }
 
-    console.log(URIs);
-
-
-    //create new playlist
-    //fetch the current users id first, then create the playlist
-    //axios was tweaking: https://stackoverflow.com/questions/59575400/getting-request-failed-with-status-code-401-error-when-trying-to-create-a-play
-    try {
-        //fetch id
-        let user = await axios.get('https://api.spotify.com/v1/me', {
-            headers: {
-                'Authorization': 'Bearer ' + ACCESS_TOKEN
-            }
-        });
-        console.log(user.data);
-        const { id } = user.data;
-        const data = {
-            name: NAME
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        var NEW_PLAYLIST = await axios.post(`https://api.spotify.com/v1/users/${id}/playlists`, data, config)
-    }
-    catch (e) {
-        console.log(e);
-        //do sumn else
-        //res.redirect('/')
-    }
-
-    console.log("new playlist")
-    console.log(NEW_PLAYLIST.data);
-    const NEW_PLAYLIST_ID = NEW_PLAYLIST.data.id;
-
-    const URL = NEW_PLAYLIST.data.external_urls.spotify;
-    console.log(NEW_PLAYLIST_ID);
-    console.log(URL);
-
-    //TODO: Destructure Object to get external URL and other necessary fields
-
-
-    //add tracks to new playlist
-
-    try {
-        const data = {
-            uris: URIs
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        const result = axios.post(`https://api.spotify.com/v1/playlists/${NEW_PLAYLIST_ID}/tracks`, data, config)
-        return NEW_PLAYLIST.data;
-    }
-    catch (e) {
-        console.log(e);
-        //do sumn else
-        //res.redirect('/');
-    }
+    return URIs;
 }
 
 // A + B
@@ -110,73 +44,7 @@ const union = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
             URIs.push(item);
     }
 
-    console.log(URIs);
-
-
-    //create new playlist
-    //fetch the current users id first, then create the playlist
-    //axios was tweaking: https://stackoverflow.com/questions/59575400/getting-request-failed-with-status-code-401-error-when-trying-to-create-a-play
-    try {
-        //fetch id
-        let user = await axios.get('https://api.spotify.com/v1/me', {
-            headers: {
-                'Authorization': 'Bearer ' + ACCESS_TOKEN
-            }
-        });
-        console.log(user.data);
-        const { id } = user.data;
-        const data = {
-            name: NAME
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        var NEW_PLAYLIST = await axios.post(`https://api.spotify.com/v1/users/${id}/playlists`, data, config)
-    }
-    catch (e) {
-        console.log(e);
-        //do sumn else
-        //res.redirect('/')
-    }
-
-    console.log("new playlist")
-    console.log(NEW_PLAYLIST.data);
-    const NEW_PLAYLIST_ID = NEW_PLAYLIST.data.id;
-
-    const URL = NEW_PLAYLIST.data.external_urls.spotify;
-    console.log(NEW_PLAYLIST_ID);
-    console.log(URL);
-
-    //TODO: Destructure Object to get external URL and other necessary fields
-
-
-    //add tracks to new playlist
-
-    try {
-        const data = {
-            uris: URIs
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        const result = axios.post(`https://api.spotify.com/v1/playlists/${NEW_PLAYLIST_ID}/tracks`, data, config)
-        return NEW_PLAYLIST.data;
-    }
-    catch (e) {
-        console.log(e);
-        //do sumn else
-        //res.redirect('/');
-    }
+    return URIs;
 }
 
 
@@ -203,73 +71,7 @@ const difference = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
     //assign URIs to the set
 
 
-    console.log(URIs);
-
-
-    //create new playlist
-    //fetch the current users id first, then create the playlist
-    //axios was tweaking: https://stackoverflow.com/questions/59575400/getting-request-failed-with-status-code-401-error-when-trying-to-create-a-play
-    try {
-        //fetch id
-        let user = await axios.get('https://api.spotify.com/v1/me', {
-            headers: {
-                'Authorization': 'Bearer ' + ACCESS_TOKEN
-            }
-        });
-        console.log(user.data);
-        const { id } = user.data;
-        const data = {
-            name: NAME
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        var NEW_PLAYLIST = await axios.post(`https://api.spotify.com/v1/users/${id}/playlists`, data, config)
-    }
-    catch (e) {
-        console.log(e);
-        //do sumn else
-        //res.redirect('/')
-    }
-
-    console.log("new playlist")
-    console.log(NEW_PLAYLIST.data);
-    const NEW_PLAYLIST_ID = NEW_PLAYLIST.data.id;
-
-    const URL = NEW_PLAYLIST.data.external_urls.spotify;
-    console.log(NEW_PLAYLIST_ID);
-    console.log(URL);
-
-    //TODO: Destructure Object to get external URL and other necessary fields
-
-
-    //add tracks to new playlist
-
-    try {
-        const data = {
-            uris: URIs
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        const result = axios.post(`https://api.spotify.com/v1/playlists/${NEW_PLAYLIST_ID}/tracks`, data, config)
-        return NEW_PLAYLIST.data;
-    }
-    catch (e) {
-        console.log(e);
-        //do sumn else
-        //res.redirect('/');
-    }
+    return URIs;
 }
 
 //not (A intersection B)
@@ -285,7 +87,7 @@ const nand = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
     }
 
     //loop over playlist 2 and remove elements that were found in playlist_1 and add elements that are unique to in playlist_2
-    for (let item of playlist_2.tracks.items) {
+    for (let item of playlist_2) {
         if (!songs.has(item))
             songs.add(item)
         else
@@ -293,74 +95,7 @@ const nand = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
     }
 
     URIs = Array.from(songs)
-
-    console.log(URIs);
-
-
-    //create new playlist
-    //fetch the current users id first, then create the playlist
-    //axios was tweaking: https://stackoverflow.com/questions/59575400/getting-request-failed-with-status-code-401-error-when-trying-to-create-a-play
-    try {
-        //fetch id
-        let user = await axios.get('https://api.spotify.com/v1/me', {
-            headers: {
-                'Authorization': 'Bearer ' + ACCESS_TOKEN
-            }
-        });
-        console.log(user.data);
-        const { id } = user.data;
-        const data = {
-            name: NAME
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        var NEW_PLAYLIST = await axios.post(`https://api.spotify.com/v1/users/${id}/playlists`, data, config)
-    }
-    catch (e) {
-        console.log(e);
-        //do sumn else
-        //res.redirect('/')
-    }
-
-    console.log("new playlist")
-    console.log(NEW_PLAYLIST.data);
-    const NEW_PLAYLIST_ID = NEW_PLAYLIST.data.id;
-
-    const URL = NEW_PLAYLIST.data.external_urls.spotify;
-    console.log(NEW_PLAYLIST_ID);
-    console.log(URL);
-
-    //TODO: Destructure Object to get external URL and other necessary fields
-
-
-    //add tracks to new playlist
-
-    try {
-        const data = {
-            uris: URIs
-        }
-
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${ACCESS_TOKEN}`
-            }
-        };
-
-        const result = axios.post(`https://api.spotify.com/v1/playlists/${NEW_PLAYLIST_ID}/tracks`, data, config)
-        return NEW_PLAYLIST.data;
-    }
-    catch (e) {
-        console.log(e);
-        //do sumn else
-        //res.redirect('/');
-    }
+    return URIs;
 }
 
 
