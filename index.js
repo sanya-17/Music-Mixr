@@ -3,8 +3,8 @@ const app = express();
 const path = require('path')
 const axios = require('axios');
 const queryString = require('query-string');
-const set_operations = require('./set_operations');
-const fetch_playlists = require('./fetch_playlists');
+const setOperations = require('./setOperations');
+const getTracks = require('./getTracks');
 const config = require('./config')
 
 //To parse form data in POST request body:
@@ -75,11 +75,12 @@ app.get('/home', async (req, res) => {
     }
     catch (e) {
         console.log(e);
+        res.redirect('/');
     }
 })
 
-//TODO: Modularize
 //TODO: Request refresh token if necessary
+//TODO: Handle null tracks and playlists
 //TODO: Handle playlists with over 100 songs
 //TODO: Error Handling
 //TODO: Result Template
@@ -88,24 +89,48 @@ app.post('/new_playlist', async (req, res) => {
     const NAME = req.body.playlist_name || 'Merged Playlist';
     const OPERATION = req.body.operation_select;
 
-    let [playlist_1, playlist_2] = await fetch_playlists(p1, p2, ACCESS_TOKEN);
+
+    try {
+        var playlist_1 = await getTracks(p1, ACCESS_TOKEN);
+        var playlist_2 = await getTracks(p2, ACCESS_TOKEN);
+    }
+    catch (e) {
+        console.log(e);
+        return res.redirect('/')
+    }
+
+    /*
+    try {
+        let [playlist_1, playlist_2] = await fetch_playlists(p1, p2, ACCESS_TOKEN);
+    }
+    catch {
+        console.log(e);
+        res.redirect('/')
+    }
+    */
     let NEW_PLAYLIST = {}
 
+
+    //do try catch
     switch (OPERATION) {
         case "intersection":
-            NEW_PLAYLIST = await set_operations.intersection(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            NEW_PLAYLIST = await setOperations.intersection(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            res.redirect('/home');
             break;
 
         case "union":
-            NEW_PLAYLIST = await set_operations.union(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            NEW_PLAYLIST = await setOperations.union(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            res.redirect('/home');
             break;
 
         case "nand":
-            NEW_PLAYLIST = await set_operations.nand(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            NEW_PLAYLIST = await setOperations.nand(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            res.redirect('/home');
             break;
 
         case "difference":
-            NEW_PLAYLIST = await set_operations.difference(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            NEW_PLAYLIST = await setOperations.difference(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
+            res.redirect('/home');
             break
 
 
@@ -113,7 +138,7 @@ app.post('/new_playlist', async (req, res) => {
     }
     //TODO: Redirect to a results page
 
-    res.redirect('/home');
+    //res.redirect('/home');
 })
 
 app.listen(3000, () => {
