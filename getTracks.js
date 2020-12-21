@@ -1,10 +1,11 @@
 const axios = require('axios');
 
 
-//get list of URIs
+//get list of track URIs in a playlist given playlist id and access token
 
 const getTracks = async function (playlist_id, ACCESS_TOKEN) {
     URIs = [];
+    //fetch playlist tracks
     try {
         var playlist = await axios.get(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`, {
             headers: {
@@ -41,8 +42,8 @@ const getTracks = async function (playlist_id, ACCESS_TOKEN) {
 
         return URIs;
     }
-    catch (e) {
-        //do something
+    //dummy finally block. Exceptions will be caught in index.js
+    finally {
     }
 }
 

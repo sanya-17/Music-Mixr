@@ -1,9 +1,7 @@
-const axios = require('axios');
 
-//TODO: return on catches
-//A * B
 
-//const getTracks = async function 
+//all functions return an array of track URIs
+//(A ⋂ B) 
 const intersection = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
     const URIs = [];
 
@@ -24,13 +22,12 @@ const intersection = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME)
     return URIs;
 }
 
-// A + B
+// (A ⋃ B)
 const union = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
     const URIs = [];
 
 
     //TODO: Cache the playlist with the larger size to improve performace
-    //TODO: Loop with a counter to reduce iterations
     //add playlist_1 uris to set
     let songs = new Set();
     for (let item of playlist_1) {
@@ -48,7 +45,7 @@ const union = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
 }
 
 
-//A - B
+//(A - B)
 //everything in A that isn't in B
 const difference = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
     let URIs = [];
@@ -74,7 +71,7 @@ const difference = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
     return URIs;
 }
 
-//not (A intersection B)
+//~(A ⋂ B)
 const nand = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
     let URIs = [];
 

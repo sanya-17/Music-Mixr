@@ -18,19 +18,37 @@
 </head>
 
 <body class="bg-dark text-white">
-    <div class="container mt-5 ">
-        <h1> My Playlists </h1>
-        <p class="text-muted">Select 2 Playlists to Merge </p>
-        <p>
-        <form method="POST" action="/new_playlist">
-            <% for (let playlist of playlists) {%>
+    <% if (messages[0]) {%>
+        <div class="alert alert-danger" role="alert">
+            <%= messages %>
+        </div>
+        <%}%>
+
+            <div class="container mt-4 ">
+                <h1> Select 2 Playlists </h1>
+                <p class="text-muted">Note: Only public playlists are shown</p>
                 <p>
-                    <label for=<%=playlist.id%>>
-                        <%= playlist.name%>
-                    </label>
-                    <input type="checkbox" name=<%=playlist.name%> id = <%=playlist.name%> value = <%=playlist.id%>>
-                </p>
-                <% } %>
+                <form method="POST" action="/new_playlist">
+                    <p>
+                        <label for="playlist_1">Select Playlist A: </label>
+                        <select name="playlist_1" id="playlist_1">
+                            <% for (let playlist of playlists) {%>
+                                <option value=<%=playlist.id%>> <%= playlist.name%>
+                                </option>
+                                <% } %>
+                        </select>
+                    </p>
+
+                    <p>
+                        <label for="playlist_2">Select Playlist B: </label>
+                        <select name="playlist_2" id="playlist_2">
+                            <% for (let playlist of playlists) {%>
+                                <option value=<%=playlist.id%>> <%= playlist.name%>
+                                </option>
+                                <% } %>
+                        </select>
+                    </p>
+
                     <p>
                         <label for="playlist_name">Enter a name for the new playlist: </label>
                         <input type="text" name="playlist_name" id="playlist_name" placeholder="Enter Name">
@@ -39,10 +57,10 @@
                         <label for="operation_select">Choose an Operation:</label>
 
                         <select name="operation_select" id="operation_select">
-                            <option value="intersection">Intersection</option>
-                            <option value="union">Union</option>
-                            <option value="nand">Nand</option>
-                            <option value="difference">Difference</option>
+                            <option value="intersection">Intersection (A ⋂ B) </option>
+                            <option value="union">Union (A ⋃ B)</option>
+                            <option value="nand">Nand ~(A ⋂ B)</option>
+                            <option value="difference">Difference (A - B)</option>
                         </select>
                     </p>
                     <p>
@@ -50,12 +68,12 @@
                     </p>
 
 
-        </form>
-        </p>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-        crossorigin="anonymous"></script>
+                </form>
+                </p>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+                crossorigin="anonymous"></script>
 </body>
 
 </html>

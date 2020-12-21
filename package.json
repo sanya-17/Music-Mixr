@@ -19,8 +19,10 @@
   "homepage": "https://github.com/sanya-17/SpotifyMerge#readme",
   "dependencies": {
     "axios": "^0.21.0",
+    "connect-flash": "^0.1.1",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "path": "^0.12.7",
     "query-string": "^6.13.7"
   }
