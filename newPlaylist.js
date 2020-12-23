@@ -1,15 +1,8 @@
 const axios = require('axios');
 
-//sleep function
-const sleep = function (ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
-
 //creates a new playlist and adds tracks given an Array of track URIs, an access token
 //and a name for the new playlist
-const newPlaylist = async function (URIs, ACCESS_TOKEN, NAME) {
+const newPlaylist = async (URIs, ACCESS_TOKEN, NAME) => {
     //extract first 100 song URIs because songs only 100 songs can be added at a time
 
     let current = URIs.slice(0, 100);
@@ -97,17 +90,5 @@ const newPlaylist = async function (URIs, ACCESS_TOKEN, NAME) {
 
     //return the playlist object once updated
     return playlist;
-
-
-    //ISSUE: ALthough I'm fetching the playlist after getting tracks, the API still says that the playlist is empty
-    //I probably need to implement some delay betwen adding tracks and fetching the new playlist
-    //but javascript is async so i this a a headache :(
-
-    //I implemented a delay of 1.2 seconds, it might be better to poll the api to see if the track list has updated
-    //but polling = more requests??
-    //https://stackoverflow.com/questions/14249506/how-can-i-wait-in-node-js-javascript-l-need-to-pause-for-a-period-of-time (second answer)
-
-
-
 }
 module.exports = newPlaylist;

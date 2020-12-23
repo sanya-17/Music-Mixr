@@ -3,7 +3,7 @@ const axios = require('axios');
 
 //get list of track URIs in a playlist given playlist id and access token
 
-const getTracks = async function (playlist_id, ACCESS_TOKEN) {
+const getTracks = async (playlist_id, ACCESS_TOKEN) => {
     URIs = [];
     //fetch playlist tracks
     try {

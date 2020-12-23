@@ -2,7 +2,7 @@
 
 //all functions return an array of track URIs
 //(A ⋂ B) 
-const intersection = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
+const intersection = async (playlist_1, playlist_2, ACCESS_TOKEN, NAME) => {
     const URIs = [];
 
 
@@ -23,7 +23,7 @@ const intersection = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME)
 }
 
 // (A ⋃ B)
-const union = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
+const union = async (playlist_1, playlist_2, ACCESS_TOKEN, NAME) => {
     const URIs = [];
 
 
@@ -47,7 +47,7 @@ const union = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
 
 //(A - B)
 //everything in A that isn't in B
-const difference = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
+const difference = async (playlist_1, playlist_2, ACCESS_TOKEN, NAME) => {
     let URIs = [];
 
 
@@ -72,7 +72,7 @@ const difference = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
 }
 
 //~(A ⋂ B)
-const nand = async function (playlist_1, playlist_2, ACCESS_TOKEN, NAME) {
+const nand = async (playlist_1, playlist_2, ACCESS_TOKEN, NAME) => {
     let URIs = [];
 
 

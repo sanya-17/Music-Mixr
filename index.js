@@ -7,6 +7,7 @@ const setOperations = require('./setOperations');
 const getTracks = require('./getTracks');
 const config = require('./config')
 const newPlaylist = require('./newPlaylist')
+const refreshAuth = require('./refreshAuth');
 const session = require('express-session');
 const flash = require('connect-flash');
 
@@ -30,21 +31,6 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 
-const refreshAuth = async function () {
-    let data = {
-        grant_type: 'refresh_token',
-        refresh_token: REFRESH_TOKEN,
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET
-    }
-    try {
-        const result = await axios.post('https://accounts.spotify.com/api/token', queryString.stringify(data))
-        ACCESS_TOKEN = result.data.access_token;
-    }
-    catch (e) {
-        console.log(e.response)
-    }
-}
 
 app.get('/', (req, res) => {
     res.render('index')
@@ -85,10 +71,9 @@ app.get('/callback', async (req, res) => {
     }
 })
 
-
+//handles playlist entry
 app.get('/home', async (req, res) => {
     try {
-        //TODO: Show album art and prettify the list of playlits
         let playlists = await axios.get('https://api.spotify.com/v1/me/playlists', {
             headers: {
                 'Authorization': 'Bearer ' + ACCESS_TOKEN
@@ -108,8 +93,7 @@ app.get('/home', async (req, res) => {
     }
 })
 
-//TODO: Add a footer
-//TODO: error template
+//finds the result of the operation and creates a new playlist
 app.post('/new_playlist', async (req, res) => {
     const p1 = req.body.playlist_1, p2 = req.body.playlist_2;
     const NAME = req.body.playlist_name || 'Merged Playlist';
@@ -131,7 +115,6 @@ app.post('/new_playlist', async (req, res) => {
     let NEW_PLAYLIST_URIs = [];
 
     try {
-        //do try catch
         switch (OPERATION) {
             case "intersection":
                 NEW_PLAYLIST_URIs = await setOperations.intersection(playlist_1, playlist_2, ACCESS_TOKEN, NAME)
@@ -180,14 +163,12 @@ app.post('/new_playlist', async (req, res) => {
         }
     }
     catch (e) {
-        //console.log(e.response.data);
         if (e.response.status === 401) {
             refreshAuth();
             return res.redirect('/home')
         }
         return res.redirect('/')
     }
-    //res.redirect('/home');
 })
 
 app.get('/result', (req, res) => {
@@ -196,6 +177,11 @@ app.get('/result', (req, res) => {
         return res.redirect('/home')
     res.render('result', { NEW_PLAYLIST });
 })
+
+app.use(function (req, res, next) {
+    res.status(404).send("<h1> Not found </h1> The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.")
+})
+
 
 app.listen(3000, () => {
     console.log('Listening on Port 3000')
