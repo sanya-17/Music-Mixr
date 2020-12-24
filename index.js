@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 3000;
 const path = require('path')
 const axios = require('axios');
 const queryString = require('query-string');
@@ -197,6 +198,6 @@ app.use(function (req, res, next) {
 })
 
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log('Listening on Port 3000')
 })
