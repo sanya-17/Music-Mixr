@@ -13,7 +13,7 @@ const newPlaylist = async (URIs, ACCESS_TOKEN, NAME) => {
 
     //create new playlist
     //fetch the current users id first, then create the playlist
-    //axios was tweaking: https://stackoverflow.com/questions/59575400/getting-request-failed-with-status-code-401-error-when-trying-to-create-a-play
+    //axios: https://stackoverflow.com/questions/59575400/getting-request-failed-with-status-code-401-error-when-trying-to-create-a-play
     try {
         //fetch id
         let user = await axios.get('https://api.spotify.com/v1/me', {

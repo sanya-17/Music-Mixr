@@ -7,7 +7,6 @@ const setOperations = require('./setOperations');
 const getTracks = require('./getTracks');
 const config = require('./config')
 const newPlaylist = require('./newPlaylist')
-const refreshAuth = require('./refreshAuth');
 const session = require('express-session');
 const flash = require('connect-flash');
 
@@ -31,6 +30,21 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
 
+const refreshAuth = async () => {
+    let data = {
+        grant_type: 'refresh_token',
+        refresh_token: REFRESH_TOKEN,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET
+    }
+    try {
+        const result = await axios.post('https://accounts.spotify.com/api/token', queryString.stringify(data))
+        ACCESS_TOKEN = result.data.access_token;
+    }
+    catch (e) {
+        console.log(e.response)
+    }
+}
 
 app.get('/', (req, res) => {
     res.render('index')
@@ -99,7 +113,7 @@ app.post('/new_playlist', async (req, res) => {
     const NAME = req.body.playlist_name || 'Merged Playlist';
     const OPERATION = req.body.operation_select;
 
-
+    //getTracks
     try {
         var playlist_1 = await getTracks(p1, ACCESS_TOKEN);
         var playlist_2 = await getTracks(p2, ACCESS_TOKEN);
@@ -113,7 +127,7 @@ app.post('/new_playlist', async (req, res) => {
     }
 
     let NEW_PLAYLIST_URIs = [];
-
+    //perform operation on track URI's and create a new playlist
     try {
         switch (OPERATION) {
             case "intersection":
