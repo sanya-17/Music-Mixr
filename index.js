@@ -8,7 +8,7 @@ const setOperations = require('./setOperations');
 const getTracks = require('./getTracks');
 const config = process.env.PORT ? '' : require('./config');
 const newPlaylist = require('./newPlaylist')
-const session = require('express-session');
+const session = require('cookie-session');
 const flash = require('connect-flash');
 
 const sessionOptions = { secret: 'klnaljk23012lkjdaya2', resave: false, saveUninitialized: false }
