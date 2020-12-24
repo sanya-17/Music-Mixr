@@ -6,7 +6,7 @@ const axios = require('axios');
 const queryString = require('query-string');
 const setOperations = require('./setOperations');
 const getTracks = require('./getTracks');
-//const config = require('./config')
+const config = require('./config')
 const newPlaylist = require('./newPlaylist')
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 const CLIENT_ID = 'aa0cd8260d834c78850ede01794ee230';
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const SCOPES = 'playlist-modify-public';
-const REDIRECT_URI = 'http://localhost:3000/callback'
+const REDIRECT_URI = process.env.PORT ? 'https://music-mixr.herokuapp.com/callback' : 'http://localhost:3000/callback'
 let ACCESS_TOKEN = '';
 let REFRESH_TOKEN = '';
 let NEW_PLAYLIST = {};
