@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 const CLIENT_ID = 'aa0cd8260d834c78850ede01794ee230';
-const CLIENT_SECRET = config;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const SCOPES = 'playlist-modify-public';
 const REDIRECT_URI = 'http://localhost:3000/callback'
 let ACCESS_TOKEN = '';
@@ -199,5 +199,5 @@ app.use(function (req, res, next) {
 
 
 app.listen(PORT, () => {
-    console.log('Listening on Port 3000')
+    console.log(`Listening on Port ${PORT}`)
 })
