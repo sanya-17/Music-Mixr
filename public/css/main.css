@@ -1,3 +1,8 @@
 body {
     font-family: 'Lato', sans-serif;
 }
+
+#_404{
+    font-weight: 900;
+	font-size: 5rem;
+}

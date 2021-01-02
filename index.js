@@ -194,7 +194,7 @@ app.get('/result', (req, res) => {
 })
 
 app.use(function (req, res, next) {
-    res.status(404).send("<h1> Not found </h1> The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.")
+    res.status(404).render('_404')
 })
 
 
