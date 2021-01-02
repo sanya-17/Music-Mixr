@@ -30,7 +30,7 @@ To run locally,
 
 ## How It Works
 
-1.) Authentication
+1.) Authorization
 
 2.) Fetch Playlists and abstrack track URIs
 
