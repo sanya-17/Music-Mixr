@@ -32,9 +32,9 @@ To run locally,
 
 1.) Authorization
 
-2.) Fetch Playlists and abstrack track URIs
+2.) Fetch playlists and extract track URIs
 
-3.) Perform set operation on URIs
+3.) Perform set operation on track URIs
 
 4.) Create new playlist
 
